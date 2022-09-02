@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBar from "./SearchBar";
 import UsersList from "./UsersList";
 
@@ -49,10 +49,10 @@ const UsersPage = () => {
       />
       <p>Users per page: </p>
       <div>
-        <button onClick={()=>setQuerySize("5")}>
+        <button className="btn btn-primary" onClick={()=>setQuerySize("5")}>
           5
         </button>
-        <button onClick={()=>setQuerySize("10")}>
+        <button className="btn btn-primary" onClick={()=>setQuerySize("10")}>
           10
         </button>
       </div>
