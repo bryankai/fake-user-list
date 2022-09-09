@@ -15,10 +15,16 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px 20px; 
+  gap: 10px 20px;
 }
 
-.user { 
+.user {
   background-color: azure;
+  width: 20rem;
 }
 
+.users-page-selection {
+  display: flex;
+  justify-content: center;
+  
+}

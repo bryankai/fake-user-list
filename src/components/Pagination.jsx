@@ -21,9 +21,13 @@ const Pagination = ({ itemCount, pageSize, currentPage, setCurrentPage }) => {
     <nav aria-label="users-page-selection">
       <ul className="pagination">
         <li className={currentPage === 1 ? "page-item disabled" : "page-item"}>
-          <a class="page-link" href="#">
+          <button
+            className="page-link"
+            href="#"
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
             Previous
-          </a>
+          </button>
         </li>
         {pages.map((page) => (
           <li
@@ -31,16 +35,24 @@ const Pagination = ({ itemCount, pageSize, currentPage, setCurrentPage }) => {
             className={classNames(page)}
             onClick={() => setCurrentPage(page)}
           >
-            <a class="page-link" href="#">
+            <button className="page-link" href="#">
               {page}
-            </a>
+            </button>
           </li>
         ))}
-        <li className="page-item">
+        <li
+          className={
+            currentPage === numberOfPages ? "page-item disabled" : "page-item"
+          }
+        >
           {" "}
-          <a class="page-link" href="#">
+          <button
+            className="page-link"
+            href="#"
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
             Next
-          </a>
+          </button>
         </li>
       </ul>
     </nav>
