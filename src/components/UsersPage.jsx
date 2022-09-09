@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import UsersList from "./UsersList";
+import Pagination from "./Pagination";
 
 const UsersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
-  const [isLoaded,setIsLoaded] = useState(true);
-  const [error,setError] = useState();
-  const [querySize,setQuerySize] = useState("10");
+  const [isLoaded, setIsLoaded] = useState(true);
+  const [error, setError] = useState(null);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const QUERY_SIZE = 20;
 
   useEffect(() => {
-    fetch("https://randomuser.me/api/?results=" + querySize)
-      .then(res => res.json())
+    fetch("https://randomuser.me/api/?results=" + QUERY_SIZE)
+      .then((res) => res.json())
       .then(
         (response) => {
-          console.log(response.results)
+          console.log(response.results);
           setIsLoaded(true);
           setUsers(response.results);
         },
@@ -25,41 +29,52 @@ const UsersPage = () => {
           setIsLoaded(true);
           setError(error);
         }
-      )
-  }, [querySize])
+      );
+  }, []);
 
   const filterUsers = (users, searchQuery) => {
+    console.log(users, searchQuery);
     let filteredUsers;
-    if(searchQuery.length>0) {
-      filteredUsers = users.filter((user)=> user.name.first.toLowerCase().includes(searchQuery) );
+    if (searchQuery.length > 0) {
+      filteredUsers = users.filter((user) =>
+        user.name.first.toLowerCase().includes(searchQuery)
+      );
     } else {
       filteredUsers = users;
     }
-    console.log({filteredUsers});
     return filteredUsers;
-  }
+  };
+
+  const paginate = (list, pageSize, currentPage) => {
+    const startItem = (currentPage - 1) * pageSize;
+    return list.slice(startItem, startItem + pageSize);
+  };
 
   const filteredUsers = filterUsers(users, searchQuery);
+  const currentPageUsers = paginate(filteredUsers, pageSize, currentPage);
 
-  return ( 
+  return (
     <>
-      <SearchBar 
-        searchQuery={searchQuery} 
-        setSearchQuery={setSearchQuery}
-      />
+      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <p>Users per page: </p>
       <div>
-        <button className="btn btn-primary" onClick={()=>setQuerySize("5")}>
-          5
-        </button>
-        <button className="btn btn-primary" onClick={()=>setQuerySize("10")}>
+        <button className="btn btn-primary" onClick={() => setPageSize(10)}>
           10
+        </button>
+        <button className="btn btn-primary" onClick={() => setPageSize(20)}>
+          20
         </button>
       </div>
       <p>{searchQuery}</p>
-      <UsersList users={filteredUsers}/>
+      <UsersList users={currentPageUsers} />
+      <Pagination
+        itemCount={filteredUsers.length}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
-   );
-}
- 
+  );
+};
+
 export default UsersPage;
