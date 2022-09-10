@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import UsersList from "./UsersList";
 import Pagination from "./Pagination";
-import sampleResponse from "../assets/sampleData_50";
+import sampleResponse from "../assets/sampleData_100";
 
 const UsersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,16 +29,13 @@ const UsersPage = () => {
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
         (error) => {
+          console.log(error.message);
           setIsLoaded(true);
           setError(error.message);
           setUsers(sampleResponse.results);
         }
       );
   }, []);
-
-  useEffect(() => {
-    console.log(users.length);
-  });
 
   const filterUsers = (users, searchQuery) => {
     console.log(users, searchQuery);
@@ -50,12 +47,10 @@ const UsersPage = () => {
     } else {
       filteredUsers = users;
     }
-    console.log("filteredUsers.length: " + filteredUsers.length);
     return filteredUsers;
   };
 
   const paginate = (list, pageSize, currentPage) => {
-    console.log(list);
     const startItem = (currentPage - 1) * pageSize;
     return list.slice(startItem, startItem + pageSize);
   };
@@ -92,7 +87,7 @@ const UsersPage = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      {error && <h2>{error.message}</h2>}
+      {error && <h2>{error} data. Displaying sample data instead.</h2>}
       <UsersList users={currentPageUsers} />
     </>
   );
